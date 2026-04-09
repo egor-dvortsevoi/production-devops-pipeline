@@ -1,0 +1,28 @@
+---
+
+name: Production DevOps Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set short SHA
+        run: echo "SHORT_SHA=$(echo ${GITHUB_SHA:0:7})" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: docker build -t felixdvrt/production-devops-pipeline:${{ env.SHORT_SHA }} .
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Push Docker image
+        run: docker push felixdvrt/production-devops-pipeline:${{ env.SHORT_SHA }}
