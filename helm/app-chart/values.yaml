@@ -1,6 +1,6 @@
 image:
   repository: felixdvrt/production-devops-pipeline
-  tag: 0293c16
+  tag: 5bebb82
   pullPolicy: IfNotPresent
 
 service:
