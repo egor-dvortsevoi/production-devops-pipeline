@@ -1,6 +1,6 @@
 image:
   repository: felixdvrt/production-devops-pipeline
-  tag: latest
+  tag: dfca60d
   pullPolicy: IfNotPresent
 
 service:
