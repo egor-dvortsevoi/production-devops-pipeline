@@ -1,0 +1,14 @@
+image:
+  repository: felixdvrt/production-devops-pipeline
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+
+serviceAccount:
+  enabled: false

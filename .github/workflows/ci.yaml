@@ -26,3 +26,15 @@ jobs:
 
       - name: Push Docker image
         run: docker push felixdvrt/production-devops-pipeline:${{ env.SHORT_SHA }}
+
+      - name: Configure Git Author
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Update Helm chart with new image tag
+        run: |
+          sed -i "s/tag: .*/tag: ${{ env.SHORT_SHA }}/" helm/app-chart/values.yaml
+          git add helm/app-chart/values.yaml
+          git commit -m "Update image tag to ${{ env.SHORT_SHA }}"
+          git push origin main
