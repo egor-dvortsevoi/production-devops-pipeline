@@ -12,3 +12,6 @@ ingress:
 
 serviceAccount:
   enabled: false
+
+httpRoute:
+  enabled: false

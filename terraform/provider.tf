@@ -3,7 +3,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  kubernetes {
-    config_path = "~/.kube/config"
+  kubernetes = {
+    config_path = pathexpand("~/.kube/config")
   }
 }
