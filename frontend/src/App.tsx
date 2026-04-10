@@ -112,8 +112,8 @@ export default function App() {
           <Route
             path="/patient"
             element={
-              <ProtectedRoute isAuthenticated={!!token}>
-                <PatientPage />
+              <ProtectedRoute isAuthenticated={!!token && effectiveRole === "patient"}>
+                <PatientPage token={token} />
               </ProtectedRoute>
             }
           />

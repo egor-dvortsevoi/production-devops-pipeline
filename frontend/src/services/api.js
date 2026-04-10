@@ -26,6 +26,11 @@ export function isTokenUsable(token) {
     const now = Math.floor(Date.now() / 1000);
     return payload.exp > now;
 }
+function authHeaders(token) {
+    return {
+        Authorization: `Bearer ${token}`,
+    };
+}
 export async function login(request) {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
@@ -42,19 +47,61 @@ export async function login(request) {
 export async function logout(token) {
     await fetch(`${API_BASE_URL}/auth/logout`, {
         method: "POST",
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(token),
     });
 }
 export async function getCurrentUser(token) {
     const response = await fetch(`${API_BASE_URL}/users/me`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: authHeaders(token),
     });
     if (!response.ok) {
         throw new Error("Unable to fetch user profile");
+    }
+    return (await response.json());
+}
+export async function getPatientProfile(token) {
+    const response = await fetch(`${API_BASE_URL}/patients/me/profile`, {
+        headers: authHeaders(token),
+    });
+    if (!response.ok) {
+        throw new Error("Unable to fetch patient profile");
+    }
+    return (await response.json());
+}
+export async function updatePatientProfile(token, payload) {
+    const response = await fetch(`${API_BASE_URL}/patients/me/profile`, {
+        method: "PUT",
+        headers: {
+            ...authHeaders(token),
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+        throw new Error("Unable to update patient profile");
+    }
+    return (await response.json());
+}
+export async function getPatientAppointments(token) {
+    const response = await fetch(`${API_BASE_URL}/patients/me/appointments`, {
+        headers: authHeaders(token),
+    });
+    if (!response.ok) {
+        throw new Error("Unable to fetch appointments");
+    }
+    return (await response.json());
+}
+export async function createPatientAppointment(token, payload) {
+    const response = await fetch(`${API_BASE_URL}/patients/me/appointments`, {
+        method: "POST",
+        headers: {
+            ...authHeaders(token),
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+        throw new Error("Unable to create appointment");
     }
     return (await response.json());
 }

@@ -20,6 +20,47 @@ type CurrentUser = {
   created_at: string;
 };
 
+export type PatientProfile = {
+  user_id: number;
+  full_name: string | null;
+  date_of_birth: string | null;
+  phone: string | null;
+  preferred_timezone: string | null;
+  insurance_provider: string | null;
+  emergency_contact: string | null;
+  allergies: string | null;
+  notes: string | null;
+  updated_at: string;
+};
+
+export type PatientProfileUpdateRequest = {
+  full_name?: string | null;
+  date_of_birth?: string | null;
+  phone?: string | null;
+  preferred_timezone?: string | null;
+  insurance_provider?: string | null;
+  emergency_contact?: string | null;
+  allergies?: string | null;
+  notes?: string | null;
+};
+
+export type Appointment = {
+  id: number;
+  scheduled_at: string;
+  reason: string;
+  status: string;
+  created_at: string;
+};
+
+type AppointmentListResponse = {
+  items: Appointment[];
+};
+
+export type AppointmentCreateRequest = {
+  scheduled_at: string;
+  reason: string;
+};
+
 type JwtPayload = {
   sub: string;
   role: "patient" | "staff" | "admin";
@@ -57,6 +98,12 @@ export function isTokenUsable(token: string): boolean {
   return payload.exp > now;
 }
 
+function authHeaders(token: string): HeadersInit {
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+}
+
 export async function login(request: LoginRequest): Promise<LoginResponse> {
   const response = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
@@ -76,17 +123,13 @@ export async function login(request: LoginRequest): Promise<LoginResponse> {
 export async function logout(token: string): Promise<void> {
   await fetch(`${API_BASE_URL}/auth/logout`, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: authHeaders(token),
   });
 }
 
 export async function getCurrentUser(token: string): Promise<CurrentUser> {
   const response = await fetch(`${API_BASE_URL}/users/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: authHeaders(token),
   });
 
   if (!response.ok) {
@@ -94,4 +137,68 @@ export async function getCurrentUser(token: string): Promise<CurrentUser> {
   }
 
   return (await response.json()) as CurrentUser;
+}
+
+export async function getPatientProfile(token: string): Promise<PatientProfile> {
+  const response = await fetch(`${API_BASE_URL}/patients/me/profile`, {
+    headers: authHeaders(token),
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to fetch patient profile");
+  }
+
+  return (await response.json()) as PatientProfile;
+}
+
+export async function updatePatientProfile(
+  token: string,
+  payload: PatientProfileUpdateRequest,
+): Promise<PatientProfile> {
+  const response = await fetch(`${API_BASE_URL}/patients/me/profile`, {
+    method: "PUT",
+    headers: {
+      ...authHeaders(token),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to update patient profile");
+  }
+
+  return (await response.json()) as PatientProfile;
+}
+
+export async function getPatientAppointments(token: string): Promise<AppointmentListResponse> {
+  const response = await fetch(`${API_BASE_URL}/patients/me/appointments`, {
+    headers: authHeaders(token),
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to fetch appointments");
+  }
+
+  return (await response.json()) as AppointmentListResponse;
+}
+
+export async function createPatientAppointment(
+  token: string,
+  payload: AppointmentCreateRequest,
+): Promise<Appointment> {
+  const response = await fetch(`${API_BASE_URL}/patients/me/appointments`, {
+    method: "POST",
+    headers: {
+      ...authHeaders(token),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to create appointment");
+  }
+
+  return (await response.json()) as Appointment;
 }

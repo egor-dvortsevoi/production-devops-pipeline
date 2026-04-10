@@ -28,6 +28,11 @@ def login(email: str, password: str) -> dict[str, str]:
     return response.json()
 
 
+def auth_headers(email: str, password: str) -> dict[str, str]:
+    body = login(email, password)
+    return {"Authorization": f"Bearer {body['access_token']}"}
+
+
 def test_root_returns_time_payload() -> None:
     response = client.get("/")
 
@@ -131,3 +136,77 @@ def test_logout_succeeds_with_token() -> None:
 
     assert response.status_code == 200
     assert response.json()["status"] == "logged_out"
+
+
+def test_patient_profile_requires_patient_role() -> None:
+    response = client.get(
+        "/patients/me/profile",
+        headers=auth_headers("staff@example.com", "password123"),
+    )
+
+    assert response.status_code == 403
+    assert response.json()["detail"] == "forbidden"
+
+
+def test_patient_profile_get_and_update() -> None:
+    headers = auth_headers("demo@example.com", "password123")
+
+    read_response = client.get("/patients/me/profile", headers=headers)
+    assert read_response.status_code == 200
+    profile = read_response.json()
+    assert profile["user_id"] > 0
+
+    update_response = client.put(
+        "/patients/me/profile",
+        headers=headers,
+        json={
+            "full_name": "Jordan Doe",
+            "date_of_birth": "1990-01-01",
+            "phone": "+1-555-0100",
+            "preferred_timezone": "America/New_York",
+        },
+    )
+
+    assert update_response.status_code == 200
+    updated_profile = update_response.json()
+    assert updated_profile["full_name"] == "Jordan Doe"
+    assert updated_profile["date_of_birth"] == "1990-01-01"
+
+
+def test_patient_appointments_returns_seeded_data() -> None:
+    response = client.get(
+        "/patients/me/appointments",
+        headers=auth_headers("demo@example.com", "password123"),
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert "items" in body
+    assert len(body["items"]) >= 1
+
+
+def test_patient_can_create_appointment() -> None:
+    headers = auth_headers("demo@example.com", "password123")
+    create_response = client.post(
+        "/patients/me/appointments",
+        headers=headers,
+        json={
+            "scheduled_at": "2030-03-01T09:00:00+00:00",
+            "reason": "Follow-up consultation",
+        },
+    )
+
+    assert create_response.status_code == 201
+    appointment = create_response.json()
+    assert appointment["reason"] == "Follow-up consultation"
+    assert appointment["status"] == "scheduled"
+
+
+def test_patient_appointments_require_patient_role() -> None:
+    response = client.get(
+        "/patients/me/appointments",
+        headers=auth_headers("staff@example.com", "password123"),
+    )
+
+    assert response.status_code == 403
+    assert response.json()["detail"] == "forbidden"

@@ -49,6 +49,87 @@ body {
   box-shadow: 0 10px 30px rgba(16, 42, 67, 0.1);
 }
 
+.patient-grid {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.patient-card {
+  background: #f7fbff;
+  border: 1px solid #d6e5f1;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.patient-card h3 {
+  margin-top: 0;
+}
+
+.patient-card-wide {
+  grid-column: 1 / -1;
+}
+
+.patient-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.patient-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.patient-form input,
+.patient-form textarea {
+  border: 1px solid #b3c8d8;
+  border-radius: 8px;
+  padding: 0.6rem;
+  font: inherit;
+}
+
+.patient-form button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem;
+  background: #0b3c5d;
+  color: #fff;
+  cursor: pointer;
+}
+
+.appointment-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.appointment-list li {
+  border: 1px solid #d6e5f1;
+  border-radius: 8px;
+  padding: 0.65rem;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.status-pill {
+  justify-self: start;
+  background: #dff3e9;
+  color: #1b653f;
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.85rem;
+  text-transform: capitalize;
+}
+
+.meta-text {
+  color: #486581;
+  font-size: 0.9rem;
+}
+
 .auth-shell {
   min-height: 100vh;
   display: grid;
@@ -106,5 +187,13 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
+  }
+
+  .patient-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .patient-card-wide {
+    grid-column: auto;
   }
 }
