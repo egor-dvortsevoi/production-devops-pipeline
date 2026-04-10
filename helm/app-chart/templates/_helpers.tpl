@@ -51,6 +51,29 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Selector labels for backend workload
+*/}}
+{{- define "app-chart.backendSelectorLabels" -}}
+{{ include "app-chart.selectorLabels" . }}
+app.kubernetes.io/component: backend
+{{- end }}
+
+{{/*
+Selector labels for frontend workload
+*/}}
+{{- define "app-chart.frontendSelectorLabels" -}}
+{{ include "app-chart.selectorLabels" . }}
+app.kubernetes.io/component: frontend
+{{- end }}
+
+{{/*
+Frontend resource base name
+*/}}
+{{- define "app-chart.frontendFullname" -}}
+{{ printf "%s-frontend" (include "app-chart.fullname" .) }}
+{{- end }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "app-chart.serviceAccountName" -}}

@@ -37,11 +37,21 @@ jobs:
       - name: Build Docker image
         run: docker build -t felixdvrt/production-devops-pipeline:${{ env.SHORT_SHA }} -f app/Dockerfile app
 
+      - name: Build frontend Docker image
+        run: |
+          docker build \
+            -t felixdvrt/production-devops-pipeline-frontend:${{ env.SHORT_SHA }} \
+            --build-arg VITE_API_BASE_URL=/api \
+            -f frontend/Dockerfile frontend
+
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Push Docker image
         run: docker push felixdvrt/production-devops-pipeline:${{ env.SHORT_SHA }}
+
+      - name: Push frontend Docker image
+        run: docker push felixdvrt/production-devops-pipeline-frontend:${{ env.SHORT_SHA }}
 
       - name: Configure Git Author
         run: |

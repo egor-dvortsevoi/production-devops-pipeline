@@ -13,6 +13,9 @@ spec:
     repoURL: "https://github.com/egor-dvortsevoi/production-devops-pipeline"
     targetRevision: HEAD
     path: helm/app-chart
+    helm:
+      valueFiles:
+        - values-prod.yaml
 
   destination:
     server: "https://kubernetes.default.svc"

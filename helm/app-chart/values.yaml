@@ -52,3 +52,22 @@ autoscaling:
   minReplicas: 1
   maxReplicas: 5
   targetCPUUtilizationPercentage: 80
+
+frontend:
+  enabled: false
+  replicaCount: 1
+  image:
+    repository: felixdvrt/production-devops-pipeline-frontend
+    tag: 4d5d942
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 80
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
