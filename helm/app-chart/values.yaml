@@ -1,6 +1,6 @@
 image:
   repository: felixdvrt/production-devops-pipeline
-  tag: 4e1d012
+  tag: ca13810
   pullPolicy: IfNotPresent
 
 replicaCount: 1
@@ -58,7 +58,7 @@ frontend:
   replicaCount: 1
   image:
     repository: felixdvrt/production-devops-pipeline-frontend
-    tag: 4e1d012
+    tag: ca13810
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
