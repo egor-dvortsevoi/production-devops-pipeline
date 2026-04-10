@@ -2,10 +2,12 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY src/ .
+COPY requirements.txt ./
 
-RUN pip install flask
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY src/ ./
 
 EXPOSE 8080
 
-CMD ["python", "main.py"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

@@ -1,0 +1,15 @@
+replicaCount: 3
+
+resources:
+  requests:
+    cpu: 150m
+    memory: 192Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false

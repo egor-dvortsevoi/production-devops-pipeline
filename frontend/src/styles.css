@@ -1,0 +1,110 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.4;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #e6f2f7 0%, #f6fbff 100%);
+  color: #102a43;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+}
+
+.sidebar {
+  background: #0b3c5d;
+  color: #f0f8ff;
+  padding: 1.5rem 1rem;
+}
+
+.sidebar h1 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.sidebar button {
+  margin-top: 1rem;
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  padding: 0.65rem;
+  background: #328cc1;
+  color: #fff;
+  cursor: pointer;
+}
+
+.content {
+  padding: 2rem;
+}
+
+.role-page {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(16, 42, 67, 0.1);
+}
+
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 16px 40px rgba(16, 42, 67, 0.16);
+}
+
+.auth-card form {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.auth-card label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.auth-card input {
+  padding: 0.65rem;
+  border: 1px solid #b3c8d8;
+  border-radius: 8px;
+}
+
+.auth-card button {
+  margin-top: 0.4rem;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem;
+  background: #0b3c5d;
+  color: #fff;
+  cursor: pointer;
+}
+
+.error-text {
+  color: #a8201a;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+}

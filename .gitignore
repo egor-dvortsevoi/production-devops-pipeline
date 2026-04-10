@@ -1,3 +1,35 @@
+# Terraform
 .terraform/
 *.tfstate
 *.tfstate*
+
+# Documentation
+doc/
+
+# Secrets
+.env
+
+# Python
+.venv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.db
+*.db
+.pytest_cache/
+.coverage
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
